@@ -4,10 +4,10 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,27 +35,45 @@ public class OcurrenceResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Ocurrence> criar(@RequestBody Ocurrence ocurrence, HttpServletResponse response) {
-		Ocurrence ocurrenceSalva = new Ocurrence();
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/difference").build().toUri();
+	public ResponseEntity<HashMap<String, String>> criar(@Valid @RequestBody Ocurrence ocurrence, HttpServletResponse response) {
+	
+		ocurrence.setDatatime(LocalDateTime.now());		
 		
-		ocurrence.setDatatime(LocalDateTime.now());
+		Ocurrence ocurrenceSalva =  ocurrenceRepository.save(ocurrence);
 		
-		if(ocurrence.getNumber()<100) {
-			ocurrenceSalva =  ocurrenceRepository.save(ocurrence);
-		
-			uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
+		URI	uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
 					.buildAndExpand(ocurrenceSalva.getCodigo()).toUri();
-		} else {
-			return ResponseEntity.badRequest().build();
-		}
+		
 		
 		response.setHeader("Location", uri.toASCIIString());
 		
-		return ResponseEntity.created(uri).body(ocurrenceSalva);
+		HashMap<String, String> map = ocurrenceMap(ocurrenceSalva);	
+		
+		return ResponseEntity.ok(map);
+	}
+
+	@GetMapping("/{codigo}")
+	public ResponseEntity<HashMap<String, String>> buscarPeloCodigo(@PathVariable Long codigo) {
+		
+		List<Ocurrence> ocurr = ocurrenceRepository.findByNumber(codigo);
+		HashMap<String, String> map = new HashMap<String, String>();
+		if(!ocurr.isEmpty()) {		
+			 map = ocurrenceMap(ocurr.get(0));
+		}
+		
+		return !ocurr.isEmpty() ? ResponseEntity.ok(map) : ResponseEntity.notFound().build();
 	}
 	
-	private Integer differenceCalc(Integer number) {
+	private HashMap<String, String> ocurrenceMap(Ocurrence ocurrence) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("datetime", ocurrence.getDatatime().toString());
+		map.put("value", "solution");
+		map.put("number", ocurrence.getNumber().toString());
+		map.put("ocurrences", differenceCalc(ocurrence.getNumber()).toString());
+		return map;
+	}
+	
+	private Integer differenceCalc(Long number) {
 		int sumS = 0, sqrS = 0, dif = 0;
 		for(int i =0; i<=number; i++) {
 			sumS += Math.pow(i, 2);
@@ -69,20 +87,6 @@ public class OcurrenceResource {
 		dif = sqrS - sumS;
 		
 		return dif;
-	}
-
-	@GetMapping("/{codigo}")
-	public Map<String, String> buscarPeloCodigo(@PathVariable Long codigo) {
-		Optional<Ocurrence> ocurr = ocurrenceRepository.findById(codigo);
-		HashMap<String, String> map = new HashMap<String, String>();
-		if(ocurr.isPresent()) {		
-			map.put("datetime", ocurr.get().getDatatime().toString());
-			map.put("value", "solution");
-			map.put("number", ocurr.get().getNumber().toString());
-			map.put("ocurrences", differenceCalc(ocurr.get().getNumber()).toString());
-		}
-		
-		return map;
 	}
 
 }
