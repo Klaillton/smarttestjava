@@ -36,7 +36,8 @@ public class OcurrenceResource {
 	@PostMapping
 	public ResponseEntity<HashMap<String, String>> criar(@Valid @RequestBody Ocurrence ocurrence, HttpServletResponse response) {
 	
-		ocurrence.setDatatime(LocalDateTime.now());		
+		ocurrence.setDatetime(LocalDateTime.now());		
+		ocurrence.setOccurrence(differenceCalc(ocurrence.getNumber()));
 		
 		Ocurrence ocurrenceSalva =  ocurrenceRepository.save(ocurrence);
 		
@@ -65,10 +66,10 @@ public class OcurrenceResource {
 	
 	private HashMap<String, String> ocurrenceMap(Ocurrence ocurrence) {
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("datetime", ocurrence.getDatatime().toString());
+		map.put("datetime", String.valueOf(ocurrence.getDatetime()));
 		map.put("value", "solution");
-		map.put("number", ocurrence.getNumber().toString());
-		map.put("ocurrences", differenceCalc(ocurrence.getNumber()).toString());
+		map.put("number", String.valueOf(ocurrence.getNumber()));
+		map.put("ocurrences", String.valueOf(ocurrence.getOccurrence()));
 		return map;
 	}
 	

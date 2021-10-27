@@ -1,0 +1,1 @@
+ALTER TABLE occurrences ADD occurrence int(100);

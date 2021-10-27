@@ -1,6 +1,6 @@
-CREATE TABLE ocurrences (
+CREATE TABLE occurrences (
 	codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
-	datatime DATETIME,
+	datetime DATETIME,
 	number BIGINT(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

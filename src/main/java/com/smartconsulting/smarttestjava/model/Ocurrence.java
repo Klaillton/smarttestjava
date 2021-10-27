@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@Table(name = "ocurrences")
+@Table(name = "occurrences")
 public class Ocurrence {
 	
 	@Id
@@ -22,12 +22,14 @@ public class Ocurrence {
 	private Long codigo;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-	private LocalDateTime datatime;
+	private LocalDateTime datetime;
 	
 	@NotNull
 	@Min(value = 0)
 	@Max(value = 100)
 	private Long number;
+	
+	private int occurrence;
 
 	public Long getCodigo() {
 		return codigo;
@@ -37,12 +39,14 @@ public class Ocurrence {
 		this.codigo = codigo;
 	}
 
-	public LocalDateTime getDatatime() {
-		return datatime;
+	
+
+	public LocalDateTime getDatetime() {
+		return datetime;
 	}
 
-	public void setDatatime(LocalDateTime localDate) {
-		this.datatime = localDate;
+	public void setDatetime(LocalDateTime datetime) {
+		this.datetime = datetime;
 	}
 
 	public Long getNumber() {
@@ -51,6 +55,14 @@ public class Ocurrence {
 
 	public void setNumber(Long number) {
 		this.number = number;
+	}
+
+	public int getOccurrence() {
+		return occurrence;
+	}
+
+	public void setOccurrence(int occurrence) {
+		this.occurrence = occurrence;
 	}
 
 	@Override
