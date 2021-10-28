@@ -21,59 +21,80 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.smartconsulting.smarttestjava.model.Pythagorean;
 import com.smartconsulting.smarttestjava.repository.PythagoreanRepository;
 
-
-
 @RestController
 @RequestMapping("/pythagorean")
 public class PythagoreanResource {
-	
+	boolean flag;
+
 	@Autowired
 	private PythagoreanRepository pythagoreanRepository;
-	
+
 	@GetMapping
-	public List<Pythagorean> listar(){
+	public List<Pythagorean> listar() {
 		return pythagoreanRepository.findAll();
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<HashMap<String, String>> criar(@Valid @RequestBody Pythagorean pythagorean, HttpServletResponse response) {
-	
-		pythagorean.setResultado(CalculatePythagoreanTheorem(pythagorean.getNumA(), pythagorean.getNumB(), Double.valueOf(pythagorean.getNumC())));
-		
-		Pythagorean pythagoreanSalva =  pythagoreanRepository.save(pythagorean);
-		
-		URI	uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
-					.buildAndExpand(pythagoreanSalva.getCodigo()).toUri();
-		
-		
+	public ResponseEntity<HashMap<String, String>> criar(@Valid @RequestBody Pythagorean pythagorean,
+			HttpServletResponse response) {
+		flag = false;
+
+		validateNumber(pythagorean);
+
+		pythagorean.setResultado(
+				CalculatePythagoreanTheorem(pythagorean.getNumA(), pythagorean.getNumB(), pythagorean.getNumC()));
+
+		Pythagorean pythagoreanSalva = pythagoreanRepository.save(pythagorean);
+
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
+				.buildAndExpand(pythagoreanSalva.getCodigo()).toUri();
+
+
+
 		response.setHeader("Location", uri.toASCIIString());
-		
-		HashMap<String, String> map = ocurrenceMap(pythagoreanSalva);	
-		
+
+		HashMap<String, String> map = ocurrenceMap(pythagoreanSalva);
+
 		return ResponseEntity.ok(map);
 	}
 
-	
+	private void validateNumber(Pythagorean pythagorean) {
+		if ((int) pythagorean.getNumC() == 0) {
+			pythagorean.setNumC((int) Math.pow(pythagorean.getNumA(), 2) + (int) Math.pow(pythagorean.getNumB(), 2));
+			flag = true;
+		} else if ((int) pythagorean.getNumB() == 0) {
+			pythagorean.setNumB((int) Math.pow(pythagorean.getNumA(), 2) + (int) Math.pow(pythagorean.getNumC(), 2));
+			flag = true;
+		} else if ((int) pythagorean.getNumA() == 0) {
+			pythagorean.setNumA((int) Math.pow(pythagorean.getNumB(), 2) + (int) Math.pow(pythagorean.getNumC(), 2));
+			flag = true;
+		}
 
-	private boolean CalculatePythagoreanTheorem(int numA, int numB, double d) {
-		numA = (int) Math.pow(numA, 2);
-		numB = (int) Math.pow(numB, 2);
-		d = (int) Math.pow(d, 2);
-		return (numA + numB) == d;
+	}
+
+	private boolean CalculatePythagoreanTheorem(int numA, int numB, int numC) {
+		if (!flag)
+			numA = (int) Math.pow(numA, 2);
+		if (!flag)
+			numB = (int) Math.pow(numB, 2);
+		if (!flag)
+			numC = (int) Math.pow(numC, 2);
+		return (numA + numB) == numC;
+
 	}
 
 	@GetMapping("/{codigo}")
 	public ResponseEntity<HashMap<String, String>> buscarPeloCodigo(@PathVariable Long codigo) {
-		
+
 		List<Pythagorean> ocurr = pythagoreanRepository.findByCodigo(codigo);
 		HashMap<String, String> map = new HashMap<String, String>();
-		if(!ocurr.isEmpty()) {		
-			 map = ocurrenceMap(ocurr.get(0));
+		if (!ocurr.isEmpty()) {
+			map = ocurrenceMap(ocurr.get(0));
 		}
-		
+
 		return !ocurr.isEmpty() ? ResponseEntity.ok(map) : ResponseEntity.notFound().build();
 	}
-	
+
 	private HashMap<String, String> ocurrenceMap(Pythagorean pythagorean) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("numA", String.valueOf(pythagorean.getNumA()));
