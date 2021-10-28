@@ -72,7 +72,7 @@ public class PythagoreanResource {
 
 	}
 
-	private boolean CalculatePythagoreanTheorem(int numA, int numB, int numC) {
+	private boolean CalculatePythagoreanTheorem(int numA, int numB, double numC) {
 		if (!flag)
 			numA = (int) Math.pow(numA, 2);
 		if (!flag)
