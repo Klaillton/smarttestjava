@@ -1,7 +1,5 @@
 package com.smartconsulting.smarttestjava.model;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,29 +10,33 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @Entity
-@Table(name = "occurrences")
-public class Ocurrence {
+@Table(name = "pythagorean")
+public class Pythagorean {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "codigo")
 	private Long codigo;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-	@Column(name = "datetime")
-	private LocalDateTime datetime;
+	@NotNull
+	@Min(value = 0)
+	@Column(name = "numA")
+	private int numA;
 	
 	@NotNull
 	@Min(value = 0)
-	@Max(value = 100)
-	@Column(name = "number")
-	private Long number;
+	@Column(name = "numB")
+	private int numB;
 	
-	@Column(name = "occurrence")
-	private int occurrence;
+	@NotNull
+	@Min(value = 0)
+	@Max(value = 1000)
+	@Column(name = "numC")
+	private int numC;
+	
+	@Column(name = "resultado")
+	private boolean resultado;
 
 	public Long getCodigo() {
 		return codigo;
@@ -44,30 +46,38 @@ public class Ocurrence {
 		this.codigo = codigo;
 	}
 
+	public int getNumA() {
+		return numA;
+	}
+
+	public void setNumA(int numA) {
+		this.numA = numA;
+	}
+
+	public int getNumB() {
+		return numB;
+	}
+
+	public void setNumB(int numB) {
+		this.numB = numB;
+	}
+
+	public int getNumC() {
+		return numC;
+	}
+
+	public void setNumC(int numC) {
+		this.numC = numC;
+	}
+
 	
 
-	public LocalDateTime getDatetime() {
-		return datetime;
+	public boolean isResultado() {
+		return resultado;
 	}
 
-	public void setDatetime(LocalDateTime datetime) {
-		this.datetime = datetime;
-	}
-
-	public Long getNumber() {
-		return number;
-	}
-
-	public void setNumber(Long number) {
-		this.number = number;
-	}
-
-	public int getOccurrence() {
-		return occurrence;
-	}
-
-	public void setOccurrence(int occurrence) {
-		this.occurrence = occurrence;
+	public void setResultado(boolean resultado) {
+		this.resultado = resultado;
 	}
 
 	@Override
@@ -86,7 +96,7 @@ public class Ocurrence {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Ocurrence other = (Ocurrence) obj;
+		Pythagorean other = (Pythagorean) obj;
 		if (codigo == null) {
 			if (other.codigo != null)
 				return false;
@@ -94,8 +104,6 @@ public class Ocurrence {
 			return false;
 		return true;
 	}
-	
-	
 	
 	
 
