@@ -49,6 +49,8 @@ public class PythagoreanResource {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
 				.buildAndExpand(pythagoreanSalva.getCodigo()).toUri();
 
+
+
 		response.setHeader("Location", uri.toASCIIString());
 
 		HashMap<String, String> map = ocurrenceMap(pythagoreanSalva);
@@ -78,6 +80,7 @@ public class PythagoreanResource {
 		if (!flag)
 			numC = (int) Math.pow(numC, 2);
 		return (numA + numB) == numC;
+
 	}
 
 	@GetMapping("/{codigo}")
