@@ -69,7 +69,7 @@ public class OcurrenceResource {
 		map.put("datetime", String.valueOf(ocurrence.getDatetime()));
 		map.put("value", "solution");
 		map.put("number", String.valueOf(ocurrence.getNumber()));
-		map.put("ocurrences", String.valueOf(ocurrence.getOccurrence()));
+		map.put("occurrence", String.valueOf(ocurrence.getOccurrence()));
 		return map;
 	}
 	
