@@ -38,7 +38,7 @@ public class PythagoreanResource {
 	@PostMapping
 	public ResponseEntity<HashMap<String, String>> criar(@Valid @RequestBody Pythagorean pythagorean, HttpServletResponse response) {
 	
-		pythagorean.setResultado(CalculatePythagoreanTheorem(pythagorean.getNumA(), pythagorean.getNumB(), pythagorean.getNumC()));
+		pythagorean.setResultado(CalculatePythagoreanTheorem(pythagorean.getNumA(), pythagorean.getNumB(), Double.valueOf(pythagorean.getNumC())));
 		
 		Pythagorean pythagoreanSalva =  pythagoreanRepository.save(pythagorean);
 		
@@ -55,11 +55,11 @@ public class PythagoreanResource {
 
 	
 
-	private boolean CalculatePythagoreanTheorem(int numA, int numB, int numC) {
+	private boolean CalculatePythagoreanTheorem(int numA, int numB, double d) {
 		numA = (int) Math.pow(numA, 2);
 		numB = (int) Math.pow(numB, 2);
-		numC = (int) Math.pow(numC, 2);
-		return (numA + numB) == numC;
+		d = (int) Math.pow(d, 2);
+		return (numA + numB) == d;
 	}
 
 	@GetMapping("/{codigo}")
