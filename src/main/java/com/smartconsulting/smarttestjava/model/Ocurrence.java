@@ -17,22 +17,22 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name = "occurrences")
 public class Ocurrence {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "codigo")
 	private Long codigo;
-	
+
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
 	@Column(name = "datetime")
 	private LocalDateTime datetime;
-	
+
 	@NotNull
 	@Min(value = 0)
 	@Max(value = 100)
 	@Column(name = "number")
-	private Long number;
-	
+	private Double number;
+
 	@Column(name = "occurrence")
 	private int occurrence;
 
@@ -44,8 +44,6 @@ public class Ocurrence {
 		this.codigo = codigo;
 	}
 
-	
-
 	public LocalDateTime getDatetime() {
 		return datetime;
 	}
@@ -54,11 +52,13 @@ public class Ocurrence {
 		this.datetime = datetime;
 	}
 
-	public Long getNumber() {
+	
+
+	public Double getNumber() {
 		return number;
 	}
 
-	public void setNumber(Long number) {
+	public void setNumber(Double number) {
 		this.number = number;
 	}
 
@@ -94,9 +94,5 @@ public class Ocurrence {
 			return false;
 		return true;
 	}
-	
-	
-	
-	
 
 }

@@ -19,24 +19,22 @@ public class Pythagorean {
 	@Column(name = "codigo")
 	private Long codigo;
 	
-	@NotNull
 	@Min(value = 0)
 	@Column(name = "numA")
 	private int numA;
 	
-	@NotNull
 	@Min(value = 0)
 	@Column(name = "numB")
 	private int numB;
 	
-	@NotNull
 	@Min(value = 0)
 	@Max(value = 1000)
 	@Column(name = "numC")
-	private int numC;
+	private double numC;
 	
 	@Column(name = "resultado")
 	private boolean resultado;
+	
 
 	public Long getCodigo() {
 		return codigo;
@@ -62,15 +60,13 @@ public class Pythagorean {
 		this.numB = numB;
 	}
 
-	public int getNumC() {
+	public double getNumC() {
 		return numC;
 	}
 
-	public void setNumC(int numC) {
+	public void setNumC(double numC) {
 		this.numC = numC;
 	}
-
-	
 
 	public boolean isResultado() {
 		return resultado;

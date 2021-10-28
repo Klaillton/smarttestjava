@@ -53,7 +53,7 @@ public class OcurrenceResource {
 	}
 
 	@GetMapping("/{codigo}")
-	public ResponseEntity<HashMap<String, String>> buscarPeloCodigo(@PathVariable Long codigo) {
+	public ResponseEntity<HashMap<String, String>> buscarPeloCodigo(@PathVariable Double codigo) {
 		
 		List<Ocurrence> ocurr = ocurrenceRepository.findByNumber(codigo);
 		HashMap<String, String> map = new HashMap<String, String>();
@@ -73,13 +73,13 @@ public class OcurrenceResource {
 		return map;
 	}
 	
-	private Integer differenceCalc(Long number) {
+	private Integer differenceCalc(Double double1) {
 		int sumS = 0, sqrS = 0, dif = 0;
-		for(int i =0; i<=number; i++) {
+		for(int i =0; i<=double1; i++) {
 			sumS += Math.pow(i, 2);
 		}
 		
-		for(int x=0; x<=number; x++) {
+		for(int x=0; x<=double1; x++) {
 			sqrS += x;
 		}
 		sqrS = (int) Math.pow(sqrS, 2);
